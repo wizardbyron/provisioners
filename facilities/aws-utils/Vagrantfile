@@ -23,6 +23,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
   #Provision scripts
-  config.vm.provision "shell", path: "ubuntu-aws-utils.sh"
+  config.vm.provision "shell", path: "aws-utils-ubuntu.sh"
 
 end
