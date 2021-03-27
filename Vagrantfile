@@ -8,7 +8,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   config.vm.box_check_update = true
   config.vm.box = "centos/7"
-  config.vm.box_url = "https://mirrors.ustc.edu.cn/centos-cloud/centos/7/vagrant/x86_64/images/CentOS-7-x86_64-Vagrant-2004_01.VirtualBox.box"
+  # config.vm.box_url = "https://mirrors.ustc.edu.cn/centos-cloud/centos/7/vagrant/x86_64/images/CentOS-7-x86_64-Vagrant-2004_01.VirtualBox.box"
 
   config.vm.provider "virtualbox" do |v|
     v.name = "provisioners"
@@ -27,6 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", path: "distro/centos/provision.sh"
   
   # Facilities
-  config.vm.provision "shell", path: "facilities/docker-ce/docker-ce.sh"
-  #config.vm.provision "shell", path: "facilities/jenkins/jenkins-centos.sh"
+  config.vm.provision "shell", path: "facilities/docker-ce/docker-centos.sh"
+  config.vm.provision "shell", path: "facilities/k8s/master-centos.sh"
+  # config.vm.provision "shell", path: "facilities/jenkins/jenkins-centos.sh"
 end
