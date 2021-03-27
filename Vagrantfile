@@ -24,7 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
   # Linux distro
-  config.vm.provision "shell", path: "distros/centos/provision.sh"
+  config.vm.provision "shell", path: "distro/centos/provision.sh"
   
   # Facilities
   config.vm.provision "shell", path: "facilities/docker-ce/docker-ce.sh"
