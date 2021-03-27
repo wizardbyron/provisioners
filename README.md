@@ -1,8 +1,10 @@
 # Provisioners
 
-Provision scripts collection. The latest progress please refer to [Github Project](https://github.com/wizardbyron/provisioners/projects/1).
+A collection of provision scripts/configurations. 
 
-All the scripts are tested in the VM created by vagrant. Please update to latest box before provision your VM.
+All the scripts are tested in the VM created by vagrant.
+
+The latest progress please refer to [Github Project](https://github.com/wizardbyron/provisioners/projects/1).
 
 ## Prerequisites
 
@@ -12,20 +14,22 @@ All the scripts are tested in the VM created by vagrant. Please update to latest
 ## Usage
 
 1. Clone this repo via `git clone git@github.com:wizardbyron/provisioners.git`.
-2. Customize your VM settings in `[Vagrantfile](/Vagrantfile)` and `[provision.sh](/provision.sh)`.
-3. Create your VM by `vagrant up`.
+2. Customize your VM via `[Vagrantfile](/Vagrantfile)`.
+3. Provision your VM by `vagrant up`.
 
-## Utilities
+## Platforms
+
+* X86/64 Virtual Machines via VirtualBox
+
+## Linux Distros
+
+* CentOS 7
+
+## Facilities
 
 * [Docker-CE](https://www.docker.com)
+* [Jenkins](https://www.jenkins.io)
 
-## Tips
-
-Add vagrantbox from a mirror:
-
-```shell
-vagrant box add  https://mirrors.tuna.tsinghua.edu.cn/ubuntu-cloud-images/xenial/current/xenial-server-cloudimg-amd64-vagrant.box --name ubuntu/xenial64
-```
 
 ## How to contribution
 
