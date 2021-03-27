@@ -20,6 +20,7 @@ The latest progress please refer to [Github Project](https://github.com/wizardby
 ## Platforms
 
 * X86/64 Virtual Machines via VirtualBox
+* AWS
 
 ## Linux Distros
 
