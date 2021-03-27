@@ -4,4 +4,4 @@ sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 sudo yum install -y jenkins
 sudo usermod -aG docker vagrant
-sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+sudo service jenkins start
