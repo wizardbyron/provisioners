@@ -23,7 +23,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.forward_agent = true
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
-  # Common
+  # Linux distro
   config.vm.provision "shell", path: "distros/centos/provision.sh"
-
+  
+  # Facilities
+  config.vm.provision "shell", path: "facilities/docker-ce/docker-ce.sh"
+  #config.vm.provision "shell", path: "facilities/jenkins/jenkins-centos.sh"
 end
