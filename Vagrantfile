@@ -24,6 +24,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
   # Common
-  config.vm.provision "shell", path: "centos/provision.sh"
+  config.vm.provision "shell", path: "distros/centos/provision.sh"
 
 end
