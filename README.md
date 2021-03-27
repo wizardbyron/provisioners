@@ -30,6 +30,10 @@ The latest progress please refer to [Github Project](https://github.com/wizardby
 * [Docker-CE](https://www.docker.com)
 * [Jenkins](https://www.jenkins.io)
 
+## Known Issues
+
+1. If you found `umount /mnt` error. Please uninstall your current version VirtualBox Guest Plugin via `vagrant plugin uninstall vagrant-vbguest` then reinstall version `0.21` via `vagrant plugin install vagrant-vbguest --plugin-version 0.21`
+
 
 ## How to contribution
 
