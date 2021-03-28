@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", path: "distro/centos/provision.sh"
   
   # Facilities
-  config.vm.provision "shell", path: "facilities/docker-ce/docker-centos-cn.sh"
-  config.vm.provision "shell", path: "facilities/k8s/master-centos-cn.sh"
+  config.vm.provision "shell", path: "facilities/docker-ce/docker-centos.sh"
+  config.vm.provision "shell", path: "facilities/k8s/master-centos.sh"
   # config.vm.provision "shell", path: "facilities/jenkins/jenkins-centos.sh"
 end

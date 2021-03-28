@@ -38,6 +38,7 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
 }
 EOF
 
+sudo systemctl enable docker
 sudo systemctl enable docker.service
 sudo systemctl daemon-reload
 sudo systemctl restart docker
