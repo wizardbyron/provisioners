@@ -60,3 +60,5 @@ sudo kubeadm init \
 
 sudo sed -i 's/- --port=0$/#- --port=0/' /etc/kubernetes/manifests/kube-controller-manager.yaml
 sudo sed -i 's/- --port=0$/#- –-port=0/' /etc/kubernetes/manifests/kube-scheduler.yaml
+
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
