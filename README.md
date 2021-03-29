@@ -30,6 +30,7 @@ The latest progress please refer to [Github Project](https://github.com/wizardby
 
 * [Docker-CE](https://www.docker.com)
 * [Jenkins](https://www.jenkins.io)
+* [Kubernetes Master](https://kubernetes.io) with [Helm](https://helm.sh)
 
 ## Known Issues
 
