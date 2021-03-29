@@ -1,8 +1,6 @@
 # Provisioners
 
-A collection of provision scripts/configurations. 
-
-All the scripts are tested in the VM created by vagrant.
+A collection of provision scripts/configurations. All the scripts are tested in the VM created by vagrant.
 
 The latest progress please refer to [Github Project](https://github.com/wizardbyron/provisioners/projects/1).
 
@@ -16,6 +14,8 @@ The latest progress please refer to [Github Project](https://github.com/wizardby
 1. Clone this repo via `git clone git@github.com:wizardbyron/provisioners.git`.
 2. Customize your VM via `[Vagrantfile](/Vagrantfile)`.
 3. Provision your VM by `vagrant up`.
+4. Add the VM to your `hosts` file.
+5. Enjoy your VM.
 
 ## Platforms
 
@@ -35,7 +35,6 @@ The latest progress please refer to [Github Project](https://github.com/wizardby
 ## Known Issues
 
 1. If you found `umount /mnt` error. Please uninstall your current version VirtualBox Guest Plugin via `vagrant plugin uninstall vagrant-vbguest` and install earlier version `0.21` instead via `vagrant plugin install vagrant-vbguest --plugin-version 0.21`.
-
 
 ## How to contribution
 
