@@ -27,6 +27,7 @@ sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 sudo systemctl enable --now kubelet
 
+# Update docker settings
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
   "exec-opts": ["native.cgroupdriver=systemd"],
@@ -43,15 +44,25 @@ sudo systemctl enable docker.service
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 
+# Setup Network and firewall
 cat <<EOF | sudo tee /etc/sysctl.conf 
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.bridge.bridge-nf-call-arptables = 0
 EOF
-
 sudo sysctl -p
+
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+sudo firewall-cmd --permanent --add-port=6443/tcp
+sudo firewall-cmd --permanent --add-port=2379-2380/tcp
+sudo firewall-cmd --permanent --add-port=10250-10255/tcp
+sudo firewall-cmd --reload
+
+# Switch off swap
 sudo swapoff -a
 
+# Initial k8s master
 sudo kubeadm init \
 --apiserver-advertise-address=0.0.0.0 \
 --service-cidr=10.0.0.0/16 \
@@ -61,4 +72,8 @@ sudo kubeadm init \
 sudo sed -i 's/- --port=0$/#- --port=0/' /etc/kubernetes/manifests/kube-controller-manager.yaml
 sudo sed -i 's/- --port=0$/#- –-port=0/' /etc/kubernetes/manifests/kube-scheduler.yaml
 
+# Install helm
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+# Install k9s
+curl -sS https://webinstall.dev/k9s | bash
