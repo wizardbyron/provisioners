@@ -15,8 +15,8 @@ cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes-aliyun.repo
 name=Kubernetes
 baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
 enabled=1
-gpgcheck=1
-repo_gpgcheck=1
+gpgcheck=0
+repo_gpgcheck=0
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 exclude=kube*
 EOF
@@ -25,6 +25,8 @@ EOF
 sudo setenforce 0
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
+if [ $? = 0 ]; then
 sudo systemctl enable --now kubelet
 
 # Update docker settings
@@ -75,5 +77,4 @@ sudo sed -i 's/- --port=0$/#- –-port=0/' /etc/kubernetes/manifests/kube-schedu
 # Install helm
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
-# Install k9s
-curl -sS https://webinstall.dev/k9s | bash
+fi
