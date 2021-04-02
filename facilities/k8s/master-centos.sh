@@ -67,7 +67,7 @@ sudo swapoff -a
 sudo kubeadm init \
 --apiserver-advertise-address=0.0.0.0 \
 --service-cidr=10.0.0.0/16 \
---pod-network-cidr=10.0.0.0/16 \
+--pod-network-cidr=10.244.0.0/16 \
 --image-repository registry.aliyuncs.com/google_containers
 
 sudo sed -i 's/- --port=0$/#- --port=0/' /etc/kubernetes/manifests/kube-controller-manager.yaml
