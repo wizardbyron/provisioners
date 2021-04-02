@@ -56,9 +56,8 @@ sudo sysctl -p
 
 sudo systemctl enable firewalld
 sudo systemctl start firewalld
-sudo firewall-cmd --permanent --add-port=6443/tcp
 sudo firewall-cmd --permanent --add-port=2379-2380/tcp
-sudo firewall-cmd --permanent --add-port=10250-10255/tcp
+sudo firewall-cmd --permanent --add-port=6443-10255/tcp
 sudo firewall-cmd --reload
 
 # Switch off swap
