@@ -1,25 +1,32 @@
 #!/usr/bin/env bash
-# cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-# [kubernetes]
-# name=Kubernetes
-# baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
-# enabled=1
-# gpgcheck=1
-# repo_gpgcheck=1
-# gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-# exclude=kubelet kubeadm kubectl
-# EOF
-
-cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes-aliyun.repo
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
-baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
 enabled=1
 gpgcheck=1
 repo_gpgcheck=1
-gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
-exclude=kube*
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+exclude=kubelet kubeadm kubectl
 EOF
+
+# cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+# [kubernetes]
+# name=Kubernetes
+# baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+# enabled=1
+# gpgcheck=1
+# repo_gpgcheck=1
+# gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+# exclude=kube*
+# EOF
+
+# cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+# [kubernetes]
+# name=kubernetes
+# baseurl=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/yum/repos/kubernetes-el7-$basearch
+# enabled=1
+# EOF
 
 # Set SELinux in permissive mode (effectively disabling it)
 sudo setenforce 0
@@ -54,26 +61,35 @@ net.bridge.bridge-nf-call-arptables = 0
 EOF
 sudo sysctl -p
 
+# Switch off swap
+sudo swapoff -a
+
+# Initial k8s master
+sudo kubeadm config images pull
+sudo kubeadm init \
+--apiserver-advertise-address=0.0.0.0 \
+--service-cidr=10.0.0.0/16 \
+--pod-network-cidr=10.244.0.0/16
+# --image-repository registry.aliyuncs.com/google_containers
+
+sudo sed -i 's/- --port=0$/#- --port=0/' /etc/kubernetes/manifests/kube-controller-manager.yaml
+sudo sed -i 's/- --port=0$/#- –-port=0/' /etc/kubernetes/manifests/kube-scheduler.yaml
+
 sudo systemctl enable firewalld
 sudo systemctl start firewalld
 sudo firewall-cmd --permanent --add-port=2379-2380/tcp
 sudo firewall-cmd --permanent --add-port=6443-10255/tcp
 sudo firewall-cmd --reload
 
-# Switch off swap
-sudo swapoff -a
 
-# Initial k8s master
-sudo kubeadm init \
---apiserver-advertise-address=0.0.0.0 \
---service-cidr=10.0.0.0/16 \
---pod-network-cidr=10.244.0.0/16 \
---image-repository registry.aliyuncs.com/google_containers
+sudo echo "sudo swapoff -a">>$HOME/.bashrc
+sudo mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-sudo sed -i 's/- --port=0$/#- --port=0/' /etc/kubernetes/manifests/kube-controller-manager.yaml
-sudo sed -i 's/- --port=0$/#- –-port=0/' /etc/kubernetes/manifests/kube-scheduler.yaml
 
-# Install helm
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+# Install Flannel
+sudo su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+
 
 fi
