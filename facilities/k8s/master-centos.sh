@@ -65,11 +65,12 @@ sudo sysctl -p
 sudo swapoff -a
 
 # Initial k8s master
+OUTPUT_FILE=$HOME/join.sh
 sudo kubeadm config images pull
 sudo kubeadm init \
 --apiserver-advertise-address=0.0.0.0 \
 --service-cidr=10.0.0.0/16 \
---pod-network-cidr=10.244.0.0/16
+--pod-network-cidr=10.244.0.0/16 
 # --image-repository registry.aliyuncs.com/google_containers
 
 sudo sed -i 's/- --port=0$/#- --port=0/' /etc/kubernetes/manifests/kube-controller-manager.yaml
@@ -81,7 +82,6 @@ sudo firewall-cmd --permanent --add-port=2379-2380/tcp
 sudo firewall-cmd --permanent --add-port=6443-10255/tcp
 sudo firewall-cmd --reload
 
-
 sudo echo "sudo swapoff -a">>$HOME/.bashrc
 sudo mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -89,7 +89,13 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 
 # Install Flannel
-sudo su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+# Configure flannel
+curl -o kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+sed -i.bak 's|"/opt/bin/flanneld",|"/opt/bin/flanneld", "--iface=enp0s8",|' kube-flannel.yml
+kubectl create -f kube-flannel.yml
 
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+# sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
 fi
