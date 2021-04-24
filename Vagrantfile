@@ -59,9 +59,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     worker1.ssh.forward_agent = true
     worker1.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
+    # Linux distro
     worker1.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "#{LOCALE}", privileged: false
+
+    # Facilities
     worker1.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "#{LOCALE}", privileged: false
-    worker1.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "#{LOCALE}", privileged: false
+    # worker1.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "#{LOCALE}", privileged: false
   end
   
 end
