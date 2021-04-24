@@ -1,0 +1,127 @@
+Parameters:
+
+  Region:
+    Type: String
+    Default: us-east-1
+
+  AMI:
+    Type: String
+    Default: ami-0742b4e673072066f
+  
+  KeyPair:
+    Type: String
+    # Default: wizardbyron
+
+Resources:
+
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: 10.0.0.0/28
+      EnableDnsHostnames: True
+      EnableDnsSupport: True
+      Tags: 
+        - Key: Name
+          Value: "single-ec2-vpc"
+    
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      CidrBlock: 10.0.0.0/28
+      AvailabilityZone:
+        Fn::Join:
+          - ""
+          - - Ref: Region
+            - "a"
+      Tags:
+      - Key: Name
+        Value: "single-ec2-subnet"
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "single-ec2-securitygroup"
+      SecurityGroupEgress:
+      - CidrIp: 0.0.0.0/0
+        IpProtocol: -1
+      SecurityGroupIngress:
+      - IpProtocol: -1
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0  
+      VpcId:
+        Ref: VPC
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties: 
+      InternetGatewayId: 
+        Ref: InternetGateway
+      VpcId: 
+        Ref: VPC
+
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:  
+        Ref: VPC
+
+  Route:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: InternetGateway
+
+  SubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: 
+        Ref: RouteTable
+      SubnetId: 
+        Ref: Subnet
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId:
+        Ref: AMI
+      InstanceType: t3.nano
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: SecurityGroup
+          SubnetId: 
+            Ref: Subnet
+      KeyName:
+        Ref: KeyPair
+      UserData:
+        Fn::Base64:
+          Fn::Join: 
+            - "\n"
+            - - "#!/bin/bash -ex"
+              - "sudo yum update -y"
+              - "sudo yum install -y python3-pip"
+
+Outputs:
+  InstanceIP:
+    Description: The IP of EC2 Instance
+    Value:
+      Fn::GetAtt: Instance.PublicIp
+    Export:
+      Name: single-ec2-instance-ip
+
+  InstancePublicDNS:
+    Description: The Public DNS of EC2 Instance
+    Value:
+      Fn::GetAtt: Instance.PublicDnsName
+    Export:
+      Name: single-ec2-instance-dns
