@@ -1,32 +1,25 @@
 #!/usr/bin/env bash
-cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-exclude=kubelet kubeadm kubectl
-EOF
-
 # cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 # [kubernetes]
 # name=Kubernetes
-# baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+# baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
 # enabled=1
 # gpgcheck=1
 # repo_gpgcheck=1
-# gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
-# exclude=kube*
+# gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+# exclude=kubelet kubeadm kubectl
 # EOF
 
-# cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-# [kubernetes]
-# name=kubernetes
-# baseurl=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/yum/repos/kubernetes-el7-$basearch
-# enabled=1
-# EOF
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+exclude=kube*
+EOF
 
 # Set SELinux in permissive mode (effectively disabling it)
 sudo setenforce 0
@@ -48,7 +41,6 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
 }
 EOF
 
-sudo systemctl enable docker
 sudo systemctl enable docker.service
 sudo systemctl daemon-reload
 sudo systemctl restart docker
