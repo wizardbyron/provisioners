@@ -42,7 +42,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.provision "shell", path: "cloud/aws/cli-docker.sh", args: "#{LOCALE}", privileged: false
   end
 
-  config.vm.define "worker1" do |worker1|
+  config.vm.define "worker1", autostart: false do |worker1|
     worker1.vm.box_check_update = true
     worker1.vm.box = "#{boxes[DISTRO]}"
 
