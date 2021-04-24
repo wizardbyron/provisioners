@@ -1,65 +1,9 @@
 #!/usr/bin/env bash
-# cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-# [kubernetes]
-# name=Kubernetes
-# baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
-# enabled=1
-# gpgcheck=1
-# repo_gpgcheck=1
-# gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-# exclude=kubelet kubeadm kubectl
-# EOF
 
-cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
-exclude=kube*
-EOF
-
-# Set SELinux in permissive mode (effectively disabling it)
-sudo setenforce 0
-sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
-
-if [ $? = 0 ]; then
-sudo systemctl enable --now kubelet
-
-# Update docker settings
-cat <<EOF | sudo tee /etc/docker/daemon.json
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "100m"
-  },
-  "storage-driver": "overlay2"
-}
-EOF
-
-sudo systemctl enable docker.service
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-
-# Setup Network and firewall
-cat <<EOF | sudo tee /etc/sysctl.conf 
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-net.bridge.bridge-nf-call-arptables = 0
-EOF
-sudo sysctl -p
-
-# Switch off swap
-sudo swapoff -a
-fi
-
-# Initial k8s master
+# Initial k8s master cluster
+sudo systemctl enable firewalld
 sudo kubeadm init \
---image-repository registry.aliyuncs.com/google_containers \
+# --image-repository docker.mirrors.ustc.edu.cn/google-containers \
 --apiserver-advertise-address=0.0.0.0 \
 --service-cidr=10.0.0.0/16 \
 --pod-network-cidr=10.244.0.0/16 
@@ -75,7 +19,6 @@ sudo firewall-cmd --permanent --add-port=2379-2380/tcp
 sudo firewall-cmd --permanent --add-port=6443-10255/tcp
 sudo firewall-cmd --reload
 
-sudo echo "sudo swapoff -a">>$HOME/.bashrc
 sudo mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -83,11 +26,11 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 # Install Flannel
 # Configure flannel
-curl -o kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-sed -i.bak 's|"/opt/bin/flanneld",|"/opt/bin/flanneld", "--iface=enp0s8",|' kube-flannel.yml
-kubectl create -f kube-flannel.yml
+# curl -o kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+# sed -i.bak 's|"/opt/bin/flanneld",|"/opt/bin/flanneld", "--iface=enp0s8",|' kube-flannel.yml
+# kubectl create -f kube-flannel.yml
 
-sudo systemctl daemon-reload
-sudo systemctl restart kubelet
-# sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+# sudo systemctl daemon-reload
+# sudo systemctl restart kubelet
+sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 fi

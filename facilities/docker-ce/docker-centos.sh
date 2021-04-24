@@ -5,4 +5,3 @@ sudo yum install -y docker-ce docker-ce-cli containerd.io makecache fast
 sudo systemctl start docker
 sudo usermod -aG docker vagrant
 pip3 install --user docker-compose
-# pip3 install --user docker-compose -i https://pypi.tuna.tsinghua.edu.cn/simple

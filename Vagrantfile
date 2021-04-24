@@ -30,7 +30,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
     # Facilities
     master.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTOR}.sh", args: "#{LOCALE}", privileged: false
-    master.vm.provision "shell", path: "facilities/k8s/master-#{DISTOR}.sh", args: "#{LOCALE}", privileged: false
+    master.vm.provision "shell", path: "facilities/k8s/common-#{DISTOR}.sh", args: "#{LOCALE}", privileged: false
+    # master.vm.provision "shell", path: "facilities/k8s/master-#{DISTOR}.sh", args: "#{LOCALE}", privileged: false
     # config.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTOR}.sh", privileged: false
       
   end
@@ -51,6 +52,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     worker1.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
     worker1.vm.provision "shell", path: "distro/#{DISTOR}/provision.sh", args: "#{LOCALE}", privileged: false
+    worker1.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTOR}.sh", args: "#{LOCALE}", privileged: false
+    worker1.vm.provision "shell", path: "facilities/k8s/common-#{DISTOR}.sh", args: "#{LOCALE}", privileged: false
     # config.vm.provision "shell", path: "facilities/jenkins/jenkins-worker-#{DISTOR}.sh" , privileged: false
   end
   
