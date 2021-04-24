@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-pip3 install -U awscli
+pip3 install --user awscli

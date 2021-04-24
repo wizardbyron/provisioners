@@ -55,15 +55,16 @@ sudo sysctl -p
 
 # Switch off swap
 sudo swapoff -a
+fi
 
 # Initial k8s master
-OUTPUT_FILE=$HOME/join.sh
-sudo kubeadm config images pull
 sudo kubeadm init \
+--image-repository registry.aliyuncs.com/google_containers \
 --apiserver-advertise-address=0.0.0.0 \
 --service-cidr=10.0.0.0/16 \
 --pod-network-cidr=10.244.0.0/16 
-# --image-repository registry.aliyuncs.com/google_containers
+
+if [ $? = 0 ]; then
 
 sudo sed -i 's/- --port=0$/#- --port=0/' /etc/kubernetes/manifests/kube-controller-manager.yaml
 sudo sed -i 's/- --port=0$/#- –-port=0/' /etc/kubernetes/manifests/kube-scheduler.yaml
@@ -89,5 +90,4 @@ kubectl create -f kube-flannel.yml
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 # sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-
 fi
