@@ -31,7 +31,8 @@ The latest progress please refer to [Github Project](https://github.com/wizardby
 
 * [Docker-CE](https://www.docker.com)
 * [Jenkins](https://www.jenkins.io)
-* [Kubernetes Cluster Node](https://kubernetes.io/docs/setup/production-environment/) with [Kubernetes Worker Node](https://kubernetes.io/docs/setup/production-environment/)
+* [Kubernetes Cluster Node](https://kubernetes.io/docs/setup/production-environment/) with [Helm](https://helm.sh/)
+* [Kubernetes Worker Node](https://kubernetes.io/docs/setup/production-environment/) join the cluster automatically
 
 ## Known Issues
 
