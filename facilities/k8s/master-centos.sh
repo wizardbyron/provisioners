@@ -34,10 +34,12 @@ sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 sudo systemctl restart docker
 
-# Create a simple http server to share join-cluster command so that nodes can join the cluster.
 echo "Create a local http server to share the join-cluster.sh"
 mkdir $HOME/join-cluster
 kubeadm token create --print-join-command > $HOME/join-cluster/join-cluster.sh
 sudo chmod -R o+rX $HOME/join-cluster/
 sudo docker container run -d -p 8000:80 --rm --name public-info --volume $HOME/join-cluster:/usr/share/nginx/html:ro nginx
+
+echo "Install helm"
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 fi
