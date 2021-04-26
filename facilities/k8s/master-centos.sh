@@ -12,11 +12,12 @@ if [ $? = 0 ]; then
 sudo sed -i 's/- --port=0$/#- --port=0/' /etc/kubernetes/manifests/kube-controller-manager.yaml
 sudo sed -i 's/- --port=0$/#- –-port=0/' /etc/kubernetes/manifests/kube-scheduler.yaml
 
-echo "Setting up firewalld"
+echo "Setting up firewalld, refer to https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/"
 sudo systemctl enable firewalld
 sudo systemctl start firewalld
 sudo firewall-cmd --permanent --add-port=2379-2380/tcp
-sudo firewall-cmd --permanent --add-port=6443-10255/tcp
+sudo firewall-cmd --permanent --add-port=6443/tcp
+sudo firewall-cmd --permanent --add-port=10250-10252/tcp
 sudo firewall-cmd --reload
 
 echo "Setting up kubectl for $(whoami)"
