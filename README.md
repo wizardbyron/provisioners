@@ -36,7 +36,15 @@ The latest progress please refer to [Github Project](https://github.com/wizardby
 
 ## Known Issues
 
-1. If you found `umount /mnt` error. Please uninstall your current version VirtualBox Guest Plugin via `vagrant plugin uninstall vagrant-vbguest` and install earlier version `0.21` instead via `vagrant plugin install vagrant-vbguest --plugin-version 0.21`.
+### 1. `umount /mnt` error
+
+Please uninstall your current version VirtualBox Guest Plugin by following command:
+
+```vagrant plugin uninstall vagrant-vbguest```
+
+Then install earlier version `0.21` by following command:
+
+```vagrant plugin install vagrant-vbguest --plugin-version 0.21```
 
 ## How to contribution
 
