@@ -1,6 +1,6 @@
 # Provisioners
 
-A collection of provision scripts/configurations. All the scripts are tested in the VM created by vagrant.
+A collection of provision scripts/configurations. All the scripts are verified in the vagrant.
 
 The latest progress please refer to [Github Project](https://github.com/wizardbyron/provisioners/projects/1).
 
@@ -25,12 +25,13 @@ The latest progress please refer to [Github Project](https://github.com/wizardby
 ## Linux Distros
 
 * CentOS 7
+* Ubuntu xenial64
 
 ## Facilities
 
 * [Docker-CE](https://www.docker.com)
 * [Jenkins](https://www.jenkins.io)
-* [Kubernetes Master](https://kubernetes.io) with [Helm](https://helm.sh)
+* [Kubernetes Cluster Node](https://kubernetes.io/docs/setup/production-environment/) with [Kubernetes Worker Node](https://kubernetes.io/docs/setup/production-environment/)
 
 ## Known Issues
 
