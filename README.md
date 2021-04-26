@@ -12,7 +12,7 @@ The latest progress please refer to [Github Project](https://github.com/wizardby
 ## Usage
 
 1. Clone this repo via `git clone git@github.com:wizardbyron/provisioners.git`.
-2. Customize your VM via `[Vagrantfile](/Vagrantfile)`.
+2. Customize your VM via [Vagrantfile](/Vagrantfile).
 3. Provision your VM by `vagrant up`.
 4. Add the VM to your `hosts` file.
 5. Enjoy your VM.
