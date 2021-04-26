@@ -3,7 +3,6 @@
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
-LOCALE = "cn" # for mirror
 DISTRO = "centos" # or ubuntu
 CLUSTER_IP = "10.0.100.100"
 boxes ={
@@ -35,19 +34,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
     # Linux distro
-    master.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "#{LOCALE}", privileged: false
+    master.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "", privileged: false
     
     # Facilities
-    master.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "#{LOCALE}", privileged: false
-    master.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "#{LOCALE}", privileged: false
-    master.vm.provision "shell", path: "facilities/k8s/master-#{DISTRO}.sh", args: "#{LOCALE} #{CLUSTER_IP}", privileged: false
-    # config.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
+    master.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
+    master.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "", privileged: false
+    master.vm.provision "shell", path: "facilities/k8s/master-#{DISTRO}.sh", args: "#{CLUSTER_IP}", privileged: false
+    # master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
 
     # Platform
-    # master.vm.provision "shell", path: "cloud/aws/cli-docker.sh", args: "#{LOCALE}", privileged: false
+    master.vm.provision "shell", path: "cloud/aws/cli-docker.sh", args: "", privileged: false
   end
 
-  config.vm.define "worker1" do |worker1|
+  config.vm.define "worker1", autostart:true do |worker1|
     worker1.vm.box_check_update = true
     worker1.vm.box = "#{boxes[DISTRO]}"
 
@@ -68,12 +67,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     worker1.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
     # Linux distro
-    worker1.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "#{LOCALE}", privileged: false
+    worker1.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "", privileged: false
 
     # Facilities
-    worker1.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "#{LOCALE}", privileged: false
-    worker1.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "#{LOCALE}", privileged: false
-    # worker1.vm.provision "shell", path: "facilities/k8s/worker-#{DISTRO}.sh", args: "#{LOCALE} #{CLUSTER_IP}", privileged: false
+    worker1.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
+    worker1.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "", privileged: false
+    worker1.vm.provision "shell", path: "facilities/k8s/worker-#{DISTRO}.sh", args: "#{CLUSTER_IP}", privileged: false
   end
   
 end
