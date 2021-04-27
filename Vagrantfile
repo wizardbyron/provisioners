@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     #Private_network Settings
     master.vm.network "private_network", ip: "#{CLUSTER_IP}"
-    master.vm.hostname = 'master'
+    master.vm.hostname = 'master-node'
 
     #SSH
     master.ssh.forward_agent = true
@@ -38,41 +38,41 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
     # Facilities
     master.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
-    master.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "", privileged: false
-    master.vm.provision "shell", path: "facilities/k8s/master-#{DISTRO}.sh", args: "#{CLUSTER_IP}", privileged: false
+    # master.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "", privileged: false
+    # master.vm.provision "shell", path: "facilities/k8s/master-#{DISTRO}.sh", args: "#{CLUSTER_IP}", privileged: false
     # master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
 
     # Platform
     master.vm.provision "shell", path: "cloud/aws/cli-docker.sh", args: "", privileged: false
   end
 
-  config.vm.define "worker1", autostart:true do |worker1|
-    worker1.vm.box_check_update = true
-    worker1.vm.box = "#{boxes[DISTRO]}"
+  config.vm.define "worker", autostart:true do |worker|
+    worker.vm.box_check_update = true
+    worker.vm.box = "#{boxes[DISTRO]}"
 
-    worker1.vm.provider "virtualbox" do |v|
-      v.name = "worker-01"
+    worker.vm.provider "virtualbox" do |v|
+      v.name = "worker-node"
       v.memory = 2048
       v.cpus = 2
     end
 
-    worker1.vm.synced_folder ".", "/vagrant", type: "rsync"
+    worker.vm.synced_folder ".", "/vagrant", type: "rsync"
 
     #Private_network Settings
-    worker1.vm.network "private_network", ip: "10.0.100.101"
-    worker1.vm.hostname = 'worker1'
+    worker.vm.network "private_network", ip: "10.0.100.101"
+    worker.vm.hostname = 'worker'
 
     #SSH
-    worker1.ssh.forward_agent = true
-    worker1.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+    worker.ssh.forward_agent = true
+    worker.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
     # Linux distro
-    worker1.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "", privileged: false
+    worker.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "", privileged: false
 
     # Facilities
-    worker1.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
-    worker1.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "", privileged: false
-    worker1.vm.provision "shell", path: "facilities/k8s/worker-#{DISTRO}.sh", args: "#{CLUSTER_IP}", privileged: false
+    worker.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
+    # worker.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "", privileged: false
+    # worker.vm.provision "shell", path: "facilities/k8s/worker-#{DISTRO}.sh", args: "#{CLUSTER_IP}", privileged: false
   end
   
 end
