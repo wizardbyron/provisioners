@@ -3,7 +3,7 @@
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
-DISTRO = "centos" # or ubuntu
+DISTRO = "ubuntu" # or ubuntu
 CLUSTER_IP = "10.0.100.100"
 boxes ={
   "ubuntu" => "ubuntu/xenial64",
@@ -38,9 +38,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
     # Facilities
     master.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
-    # master.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "", privileged: false
-    # master.vm.provision "shell", path: "facilities/k8s/master-#{DISTRO}.sh", args: "#{CLUSTER_IP}", privileged: false
-    # master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
+    master.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
+    master.vm.provision "shell", path: "facilities/k8s/setup-cluster.sh", args: "#{CLUSTER_IP}", privileged: false
+    master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
 
     # Platform
     master.vm.provision "shell", path: "cloud/aws/cli-docker.sh", args: "", privileged: false
@@ -71,8 +71,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # Facilities
     worker.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
-    # worker.vm.provision "shell", path: "facilities/k8s/common-#{DISTRO}.sh", args: "", privileged: false
-    # worker.vm.provision "shell", path: "facilities/k8s/worker-#{DISTRO}.sh", args: "#{CLUSTER_IP}", privileged: false
+    worker.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
+    worker.vm.provision "shell", path: "facilities/k8s/setup-worker-node.sh", args: "#{CLUSTER_IP}", privileged: false
   end
   
 end
