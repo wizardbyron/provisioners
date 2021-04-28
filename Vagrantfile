@@ -43,8 +43,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.provision "shell", path: "facilities/k8s/setup-cluster.sh", args: "#{CLUSTER_IP}", privileged: false
     # master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
 
-    # Platform
-    master.vm.provision "shell", path: "cloud/aws/cli-docker.sh", args: "", privileged: false
+    # Cloud Platform
+    master.vm.provision "shell", path: "cloud/aws/awscli-docker.sh", args: "", privileged: false
   end
 
   (1..WORKER_NODES).each do |i|
