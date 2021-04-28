@@ -3,8 +3,9 @@
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
-DISTRO = "ubuntu" # or ubuntu
+DISTRO = "centos" # or ubuntu
 CLUSTER_IP = "10.0.100.100"
+WORKER_NODES = 2
 boxes ={
   "ubuntu" => "ubuntu/xenial64",
   "centos" => "centos/7",
@@ -40,39 +41,40 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
     master.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
     master.vm.provision "shell", path: "facilities/k8s/setup-cluster.sh", args: "#{CLUSTER_IP}", privileged: false
-    master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
+    # master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
 
     # Platform
     master.vm.provision "shell", path: "cloud/aws/cli-docker.sh", args: "", privileged: false
   end
 
-  config.vm.define "worker", autostart:true do |worker|
-    worker.vm.box_check_update = true
-    worker.vm.box = "#{boxes[DISTRO]}"
+  (1..WORKER_NODES).each do |i|
+    config.vm.define "worker-#{i}", autostart:true do |worker|
+      worker.vm.box_check_update = true
+      worker.vm.box = "#{boxes[DISTRO]}"
 
-    worker.vm.provider "virtualbox" do |v|
-      v.name = "worker-node"
-      v.memory = 2048
-      v.cpus = 2
+      worker.vm.provider "virtualbox" do |v|
+        v.name = "worker-node-#{i}"
+        v.memory = 2048
+        v.cpus = 2
+      end
+
+      worker.vm.synced_folder ".", "/vagrant", type: "rsync"
+
+      #Private_network Settings
+      worker.vm.network "private_network", ip: "10.0.100.10#{i}"
+      worker.vm.hostname = 'worker'
+
+      #SSH
+      worker.ssh.forward_agent = true
+      worker.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
+      # Linux distro
+      worker.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "", privileged: false
+
+      # Facilities
+      worker.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
+      worker.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
+      worker.vm.provision "shell", path: "facilities/k8s/setup-worker.sh", args: "#{CLUSTER_IP}", privileged: false
     end
-
-    worker.vm.synced_folder ".", "/vagrant", type: "rsync"
-
-    #Private_network Settings
-    worker.vm.network "private_network", ip: "10.0.100.101"
-    worker.vm.hostname = 'worker'
-
-    #SSH
-    worker.ssh.forward_agent = true
-    worker.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
-
-    # Linux distro
-    worker.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "", privileged: false
-
-    # Facilities
-    worker.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
-    worker.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
-    worker.vm.provision "shell", path: "facilities/k8s/setup-worker-node.sh", args: "#{CLUSTER_IP}", privileged: false
   end
-  
 end
