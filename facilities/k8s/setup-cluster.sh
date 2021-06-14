@@ -2,7 +2,7 @@
 
 # Initial k8s master cluster
 echo "Initilize Kubernetes Culster, IP: $1"
-sudo kubeadm init \
+sudo kubeadm init --v=5 \
     --apiserver-advertise-address=$1 \
     --service-cidr=10.0.0.0/16 \
     --pod-network-cidr=10.244.0.0/16 
