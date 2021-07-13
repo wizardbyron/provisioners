@@ -62,7 +62,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       #Private_network Settings
       worker.vm.network "private_network", ip: "10.0.100.10#{i}"
-      worker.vm.hostname = 'worker'
+      worker.vm.hostname = "worker-#{i}"
 
       #SSH
       worker.ssh.forward_agent = true
