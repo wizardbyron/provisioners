@@ -3,11 +3,11 @@
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
-DISTRO = "centos" # or ubuntu
+DISTRO = "centos" # centos or ubuntu
 CLUSTER_IP = "10.0.100.100"
-WORKER_NODES = 2
-boxes ={
-  "ubuntu" => "ubuntu/xenial64",
+WORKER_NODES = 1
+BOXES ={
+  "ubuntu" => "ubuntu/focal64",
   "centos" => "centos/7",
   "amazon" => "bento/amazonlinux-2"
 }
@@ -16,7 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   config.vm.define "master", primary: true do |master|
     master.vm.box_check_update = true
-    master.vm.box = "#{boxes[DISTRO]}"
+    master.vm.box = "#{BOXES[DISTRO]}"
 
     master.vm.provider "virtualbox" do |v|
       v.name = "master"
@@ -38,19 +38,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "", privileged: false
     
     # Facilities
-    master.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
-    master.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
-    master.vm.provision "shell", path: "facilities/k8s/setup-cluster.sh", args: "#{CLUSTER_IP}", privileged: false
+    master.vm.provision "shell", path: "facilities/docker-ce/docker.sh", args: "", privileged: false
     # master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
 
-    # Cloud Platform
+    # Cloud Platform Tools
     master.vm.provision "shell", path: "cloud/aws/awscli-docker.sh", args: "", privileged: false
+
+    # master.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
+    # master.vm.provision "shell", path: "facilities/k8s/setup-cluster.sh", args: "#{CLUSTER_IP}", privileged: false
+
   end
 
   (1..WORKER_NODES).each do |i|
     config.vm.define "worker-#{i}", autostart:true do |worker|
       worker.vm.box_check_update = true
-      worker.vm.box = "#{boxes[DISTRO]}"
+      worker.vm.box = "#{BOXES[DISTRO]}"
 
       worker.vm.provider "virtualbox" do |v|
         v.name = "worker-node-#{i}"

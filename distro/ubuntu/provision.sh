@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
-sudo apt-get update -y
-sudo apt-get dist-upgrade -y
+sudo apt update -y
+sudo apt dist-upgrade -y
+sudo apt install -y software-properties-common git python3-pip
+pip install -U pip
