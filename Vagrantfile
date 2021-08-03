@@ -3,14 +3,13 @@
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
+BOXES ={
+  "ubuntu" => "ubuntu/focal64",
+  "centos" => "centos/7"
+}
 DISTRO = "centos" # centos or ubuntu
 CLUSTER_IP = "10.0.100.100"
 WORKER_NODES = 1
-BOXES ={
-  "ubuntu" => "ubuntu/focal64",
-  "centos" => "centos/7",
-  "amazon" => "bento/amazonlinux-2"
-}
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
@@ -39,13 +38,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
     # Facilities
     master.vm.provision "shell", path: "facilities/docker-ce/docker.sh", args: "", privileged: false
-    # master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
+    master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
 
     # Cloud Platform Tools
     master.vm.provision "shell", path: "cloud/aws/awscli-docker.sh", args: "", privileged: false
-
-    # master.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
-    # master.vm.provision "shell", path: "facilities/k8s/setup-cluster.sh", args: "#{CLUSTER_IP}", privileged: false
+    
+    # Kubernetes cluster node
+    master.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
+    master.vm.provision "shell", path: "facilities/k8s/setup-cluster.sh", args: "#{CLUSTER_IP}", privileged: false
 
   end
 
@@ -75,6 +75,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Facilities
       worker.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
+      
+      # Kubernetes worker node
       worker.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
       worker.vm.provision "shell", path: "facilities/k8s/setup-worker.sh", args: "#{CLUSTER_IP}", privileged: false
     end
