@@ -5,4 +5,5 @@ curl -fsSL https://get.docker.com | sudo bash
 if [ $? = 0 ]; then
 sudo usermod -aG docker $(whoami)
 sudo systemctl restart docker
+python3 -m pip install --user docker-compose
 fi
