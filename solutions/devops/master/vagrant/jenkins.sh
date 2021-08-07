@@ -15,3 +15,4 @@ sudo apt-get install -y jenkins
 else
 echo "Your Linux package manager hasn't support"
 exit 1
+fi
