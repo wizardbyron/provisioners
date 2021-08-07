@@ -10,8 +10,8 @@ BOXES ={
 }
 DISTRO = "centos" # centos or ubuntu
 LOCAL_CLUSTER_IP = "10.0.100.100"
-WORKER_NODES = 0
-SOLUTION = "k8s" # k8s/devops
+WORKER_NODES = 1
+SOLUTION = "devops" # devops/k8s/microservices
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
@@ -36,7 +36,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
     # Provision Master Node
-    master.vm.provision "shell", path: "./essential/provision.sh", args: "#{LOCAL_CLUSTER_IP}","#{PLATFORM}" privileged: false
+    master.vm.provision "shell", path: "./essential/provision.sh", args: "#{LOCAL_CLUSTER_IP} #{PLATFORM}", privileged: false
     master.vm.provision "shell", path: "./solutions/#{SOLUTION}/master/#{PLATFORM}/setup.sh", args: "", privileged: false
   end
 
@@ -62,7 +62,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       worker.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
       # Provision Worker Node
-      worker.vm.provision "shell", path: "./essential/provision.sh", args: "#{LOCAL_CLUSTER_IP}", privileged: false
+      worker.vm.provision "shell", path: "./essential/provision.sh", args: "#{LOCAL_CLUSTER_IP} #{PLATFORM}", privileged: false
       worker.vm.provision "shell", path: "./solutions/#{SOLUTION}/worker/#{PLATFORM}/setup.sh", args: "", privileged: false
     end
   end

@@ -33,3 +33,7 @@ sudo usermod -aG docker $(whoami)
 sudo systemctl restart docker
 python3 -m pip install docker-compose
 fi
+
+echo "Get latest provisioners scripts"
+rm -rf provisioners
+git clone https://github.com/wizardbyron/provisioners
