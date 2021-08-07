@@ -10,7 +10,7 @@ BOXES ={
 }
 DISTRO = "centos" # centos or ubuntu
 LOCAL_CLUSTER_IP = "10.0.100.100"
-WORKER_NODES = 1
+WORKER_NODES = 0
 SOLUTION = "devops" # devops/k8s/microservices
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
