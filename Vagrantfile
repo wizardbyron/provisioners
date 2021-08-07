@@ -3,13 +3,17 @@
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
+PLATFORM="local" # local/aws/azure/gcp/aliyun/tencentcloud
 BOXES ={
   "ubuntu" => "ubuntu/focal64",
   "centos" => "centos/7"
 }
 DISTRO = "centos" # centos or ubuntu
-CLUSTER_IP = "10.0.100.100"
-WORKER_NODES = 1
+LOCAL_CLUSTER_IP = "10.0.100.100"
+WORKER_NODES = 0
+SOLUTION = "k8s" # k8s/devops
+
+
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
@@ -33,20 +37,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.ssh.forward_agent = true
     master.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
-    # Linux distro
-    master.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "", privileged: false
-    
-    # Facilities
-    master.vm.provision "shell", path: "facilities/docker-ce/docker.sh", args: "", privileged: false
-    master.vm.provision "shell", path: "facilities/jenkins/jenkins-#{DISTRO}.sh", privileged: false
-
-    # Cloud Platform Tools
-    master.vm.provision "shell", path: "cloud/aws/awscli-docker.sh", args: "", privileged: false
-    
-    # Kubernetes cluster node
-    master.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
-    master.vm.provision "shell", path: "facilities/k8s/setup-cluster.sh", args: "#{CLUSTER_IP}", privileged: false
-
+    # Provision Master Node
+    master.vm.provision "shell", path: "./essential/provision.sh", args: "#{LOCAL_CLUSTER_IP}","#{PLATFORM}" privileged: false
+    master.vm.provision "shell", path: "./solutions/#{SOLUTION}/master/#{PLATFORM}/setup.sh", args: "", privileged: false
   end
 
   (1..WORKER_NODES).each do |i|
@@ -62,23 +55,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       worker.vm.synced_folder ".", "/vagrant", type: "rsync"
 
-      #Private_network Settings
+      # Private_network Settings
       worker.vm.network "private_network", ip: "10.0.100.10#{i}"
       worker.vm.hostname = "worker-#{i}"
 
-      #SSH
+      # SSH
       worker.ssh.forward_agent = true
       worker.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
-      # Linux distro
-      worker.vm.provision "shell", path: "distro/#{DISTRO}/provision.sh", args: "", privileged: false
-
-      # Facilities
-      worker.vm.provision "shell", path: "facilities/docker-ce/docker-#{DISTRO}.sh", args: "", privileged: false
-      
-      # Kubernetes worker node
-      worker.vm.provision "shell", path: "facilities/k8s/installation-#{DISTRO}.sh", args: "", privileged: false
-      worker.vm.provision "shell", path: "facilities/k8s/setup-worker.sh", args: "#{CLUSTER_IP}", privileged: false
+      # Provision Worker Node
+      worker.vm.provision "shell", path: "./essential/provision.sh", args: "#{LOCAL_CLUSTER_IP}", privileged: false
+      worker.vm.provision "shell", path: "./solutions/#{SOLUTION}/worker/#{PLATFORM}/setup.sh", args: "", privileged: false
     end
   end
 end
