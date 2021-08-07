@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
-echo "Install and upgrade Jenkins via package manager."
-if [ -n "$(command -v yum)" ];then # for centos
-sudo yum install -y java-11-openjdk
-elif [ -n "$(command -v apt)" ];then # ubuntu
-sudo apt-get install -y openjdk-11-jdk
-else
-echo "Your Linux package manager hasn't support"
-exit 1
-fi
+PATH=$PATH:/home/$(whoami)/.local/bin:
+rm -rf ./provisioners-master master.zip
+wget https://github.com/wizardbyron/provisioners/archive/refs/heads/master.zip
+unzip master.zip
