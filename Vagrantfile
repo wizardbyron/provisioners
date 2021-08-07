@@ -3,7 +3,7 @@
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
-PLATFORM="local" # local/aws/azure/gcp/aliyun/tencentcloud
+PLATFORM="vagrant" # vagrant/aws/azure/gcp/aliyun/tencentcloud
 BOXES ={
   "ubuntu" => "ubuntu/focal64",
   "centos" => "centos/7"
@@ -12,8 +12,6 @@ DISTRO = "centos" # centos or ubuntu
 LOCAL_CLUSTER_IP = "10.0.100.100"
 WORKER_NODES = 0
 SOLUTION = "k8s" # k8s/devops
-
-
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
@@ -30,7 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.synced_folder ".", "/vagrant", type: "rsync"
 
     #Private_network Settings
-    master.vm.network "private_network", ip: "#{CLUSTER_IP}"
+    master.vm.network "private_network", ip: "#{LOCAL_CLUSTER_IP}"
     master.vm.hostname = 'master-node'
 
     #SSH

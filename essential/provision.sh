@@ -2,30 +2,27 @@
 export CLUSTER_IP=$1
 echo "Cluster IP: $CLUSTER_IP"
 export PATH=$PATH:/home/$(whoami)/.local/bin
-# for CentOS/RHEL
-if [ -n "$(command -v yum)" ];then
-sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.origin
+
+echo "Install and upgrade packages via package manager."
+if [ -n "$(command -v yum)" ];then # for centos
+sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 sudo yum update -y
 sudo yum upgrade -y
-sudo yum install -y git wget yum-utils python3-pip
-# for Ubuntu/Debian
-elif [ -n "$(command -v apt)" ];then 
+sudo yum install -y yum-utils git wget python3-pip
+elif [ -n "$(command -v apt)" ];then # ubuntu
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
-sudo sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
 sudo apt update -y
 sudo apt dist-upgrade -y
 sudo apt install -y software-properties-common git firewalld curl python3-pip
 else
-echo "Your linux package manager hasn't support"
+echo "Your Linux package manager hasn't support"
 exit 1
 fi
 
-curl -fsSL https://bootstrap.pypa.io/get-pip.py |sudo python3
+echo "Upgrade pip."
+sudo python3 -m pip install --upgrade pip
 
-sudo python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/pypi/simple --upgrade pip
-sudo python3 -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/pypi/simple
-
-echo "Install Ansible via pip."
+echo "Install Ansible."
 python3 -m pip install --user ansible
 
 echo "Install docker-ce via official installation script."
