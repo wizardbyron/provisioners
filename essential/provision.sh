@@ -8,12 +8,12 @@ if [ -n "$(command -v yum)" ];then # for centos
 sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 sudo yum update -y
 sudo yum upgrade -y
-sudo yum install -y yum-utils git wget python3-pip
+sudo yum install -y yum-utils git wget python3-pip unzip
 elif [ -n "$(command -v apt)" ];then # ubuntu
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
 sudo apt update -y
 sudo apt dist-upgrade -y
-sudo apt install -y software-properties-common git firewalld curl python3-pip
+sudo apt install -y software-properties-common git firewalld curl python3-pip unzip
 else
 echo "Your Linux package manager hasn't support"
 exit 1
@@ -32,8 +32,7 @@ if [ $? = 0 ]; then
 sudo usermod -aG docker $(whoami)
 sudo systemctl restart docker
 python3 -m pip install docker-compose
+else
+echo "Install docker-ce failed, Please retry or install with mirror."
+exit 1
 fi
-
-echo "Get latest provisioners scripts"
-rm -rf provisioners
-git clone https://github.com/wizardbyron/provisioners
