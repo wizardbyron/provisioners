@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+export PATH=$PATH:/home/$(whoami)/.local/bin
 export CLUSTER_IP=$1
 echo "Cluster IP: $CLUSTER_IP"
-export PATH=$PATH:/home/$(whoami)/.local/bin
+echo "$CLUSTER_IP">/home/$(whoami)/CLUSTER_IP
 
 echo "Install and upgrade packages via package manager."
 if [ -n "$(command -v yum)" ];then # for centos

@@ -5,4 +5,4 @@ wget https://github.com/wizardbyron/provisioners/archive/refs/heads/master.zip
 unzip master.zip
 
 sh -c "./provisioners-master/facilities/k8s/install.sh"
-sh -c "./provisioners-master/facilities/k8s/setup-worker.sh"
+sh -c "./provisioners-master/facilities/k8s/setup-worker.sh $(cat /home/$(whoami)/CLUSTER_IP)"
