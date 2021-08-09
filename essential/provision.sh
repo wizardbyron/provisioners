@@ -15,6 +15,7 @@ sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
 sudo apt update -y
 sudo apt dist-upgrade -y
 sudo apt install -y software-properties-common git firewalld curl python3-pip unzip
+sudo systemctl enable firewalld
 else
 echo "Your Linux package manager hasn't support"
 exit 1
