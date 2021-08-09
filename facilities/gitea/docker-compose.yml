@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   server:
-    image: gitea/gitea:1.14.6-rootless
+    image: gitea/gitea
     environment:
       - GITEA__database__DB_TYPE=mysql
       - GITEA__database__HOST=db:3306
@@ -11,8 +11,6 @@ services:
       - GITEA__database__PASSWD=gitea
     restart: always
     volumes:
-      - gitea-data-volume:/var/lib/gitea
-      - gitea-data-volume:/etc/gitea  
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -22,7 +20,7 @@ services:
       - db
 
   db:
-    image: mysql:8
+    image: mysql
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=gitea
@@ -32,6 +30,6 @@ services:
     volumes:
       - gitea-data-volume:/var/lib/mysql
   
-  volumes:
-    gitea-data-volume:
-      external: false
+volumes:
+  gitea-data-volume:
+    external: false 
