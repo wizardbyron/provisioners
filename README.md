@@ -1,6 +1,6 @@
 # Provisioners
 
-Provisioners is a set of cloud solution provision scripts collection. You can customize and create solutions on any private or public cloud service.
+Provisioners is a growing set of cloud solution provision scripts collection. You can customize and create solutions on any private or public cloud service.
 
 The latest solution progress please refer to [Github Project](https://github.com/wizardbyron/provisioners/projects/1).
 
@@ -39,6 +39,21 @@ Facility list please refer to [facilities/README.md](./facilities/README.md). Pu
 * [Kubernetes Platform](./solutions/k8s/)
 * Microservice Platform (IN PROGRESS, Pull Requests are welcome.)
 * BigData(IN PROGRESS, Pull Requests are welcome.)
+
+## Workflow
+
+1. Fork and clone this repo.
+2. Provision & update solutions in solution scripts.
+3. Extract & Push facility script from solution scripts.
+4. Verify facility script in solution scripts.
+5. Push solution script.
+
+## Convention
+
+1. Facilites scripts can be verified indivadually. 
+2. Cross distro scripts are better than distro-specified scripts.
+3. Docker is better than shell.
+4. Docker-compose is better than docker in shell.
 
 ## Known Issues
 
