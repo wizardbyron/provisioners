@@ -23,6 +23,10 @@ The latest solution progress please refer to [Github Project](https://github.com
 * X86/64 Virtual Machines via VirtualBox
 * Kubernetes
 * Amazon Web Service
+* Azure (TBD)
+* Google Cloud Platform (TBD)
+* Aliyun (TBD)
+* Tencent Cloud (TBD)
 
 ## Linux Distros
 
@@ -31,14 +35,14 @@ The latest solution progress please refer to [Github Project](https://github.com
 
 ## Facilities
 
-Facility list please refer to [facilities/README.md](./facilities/README.md). Pull Requests are welcome.
+Facility list please refer to [facilities/README.md](./facilities/README.md).
 
 ## Solutions
 
 * [DevOps Platform](./solutions/devops/)
 * [Kubernetes Platform](./solutions/k8s/)
-* Microservice Platform (IN PROGRESS, Pull Requests are welcome.)
-* BigData(IN PROGRESS, Pull Requests are welcome.)
+* Microservice Platform (TBD)
+* BigData(TBD)
 
 ## Workflow
 
