@@ -1,38 +1,44 @@
 # Provisioners
 
-A collection of provision scripts/configurations. All the scripts are verified in the vagrant.
+Provisioners is a set of cloud solution provision scripts collection. You can customize and create solutions on any private or public cloud service.
 
-The latest progress please refer to [Github Project](https://github.com/wizardbyron/provisioners/projects/1).
+The latest solution progress please refer to [Github Project](https://github.com/wizardbyron/provisioners/projects/1).
 
 ## Prerequisites
 
+* PC with Internet (Seriously!!!)
 * [VirtualBox](https://www.virtualbox.org/)
 * [Vagrant](https://vagrantup.com/)
 
 ## Usage
 
 1. Clone this repo via `git clone git@github.com:wizardbyron/provisioners.git`.
-2. Customize your VM via [Vagrantfile](/Vagrantfile).
-3. Provision your VM by `vagrant up`.
-4. Add the VM to your `hosts` file.
-5. Enjoy your VM.
+2. Customize your solution via [Vagrantfile](/Vagrantfile) and solution scripts.
+3. Provision your solution by `vagrant up`.
+4. (Option) Add the VM to your `hosts` file.
+5. Enjoy your solution.
 
 ## Platforms
 
 * X86/64 Virtual Machines via VirtualBox
-* AWS
+* Kubernetes
+* Amazon Web Service
 
 ## Linux Distros
 
 * CentOS 7
-* Ubuntu xenial64
+* Ubuntu Focal64
 
 ## Facilities
 
-* [Docker-CE](https://www.docker.com)
-* [Jenkins](https://www.jenkins.io)
-* [Kubernetes Cluster Node](https://kubernetes.io/docs/setup/production-environment/) with [Helm](https://helm.sh/)
-* [Kubernetes Worker Node](https://kubernetes.io/docs/setup/production-environment/) join the cluster automatically
+Facility list please refer to [facilities/README.md](./facilities/README.md). Pull Requests are welcome.
+
+## Solutions
+
+* [DevOps Platform](./solutions/devops/)
+* [Kubernetes Platform](./solutions/k8s/)
+* Microservice Platform (IN PROGRESS, Pull Requests are welcome.)
+* BigData(IN PROGRESS, Pull Requests are welcome.)
 
 ## Known Issues
 
