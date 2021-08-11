@@ -36,8 +36,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
     # Provision Master Node
-    master.vm.provision "shell", path: "./essential/provision.sh", args: "#{LOCAL_CLUSTER_IP} #{PLATFORM}", privileged: false, reset: true
-    master.vm.provision "shell", path: "./solutions/#{SOLUTION}/master/#{PLATFORM}/setup.sh", args: "", privileged: false, reset: true
+    master.vm.provision "shell", path: "./essential/#{PLATFORM}/init.sh", args: "", privileged: false, reset: true
+    master.vm.provision "shell", path: "./solutions/#{SOLUTION}/master/#{PLATFORM}/setup.sh", args: "#{LOCAL_CLUSTER_IP}", privileged: false, reset: true
   end
 
   (1..WORKER_NODES).each do |i|
@@ -62,8 +62,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       worker.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
       # Provision Worker Node
-      worker.vm.provision "shell", path: "./essential/provision.sh", args: "#{LOCAL_CLUSTER_IP} #{PLATFORM}", privileged: false, reset: true
-      worker.vm.provision "shell", path: "./solutions/#{SOLUTION}/worker/#{PLATFORM}/setup.sh", args: "", privileged: false, reset: true
+      worker.vm.provision "shell", path: "./essential/#{PLATFORM}/init.sh", args: "", privileged: false, reset: true
+      worker.vm.provision "shell", path: "./solutions/#{SOLUTION}/worker/#{PLATFORM}/setup.sh", args: "#{LOCAL_CLUSTER_IP}", privileged: false, reset: true
     end
   end
 end

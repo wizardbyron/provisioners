@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 PATH=$PATH:/home/$(whoami)/.local/bin
+export CLUSTER_IP=$1
+echo "Cluster IP: $CLUSTER_IP"
+
 rm -rf ./provisioners-master master.zip
 wget https://github.com/wizardbyron/provisioners/archive/refs/heads/master.zip
 unzip master.zip
-export CLUSTER_IP=$(cat /home/$(whoami)/CLUSTER_IP)
+
 sh -c "./provisioners-master/facilities/k8s/install.sh"
 sh -c "./provisioners-master/facilities/k8s/setup-cluster.sh $CLUSTER_IP"
