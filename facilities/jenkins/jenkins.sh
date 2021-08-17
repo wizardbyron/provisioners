@@ -16,3 +16,7 @@ else
 echo "Your Linux package manager hasn't support"
 exit 1
 fi
+
+sudo cp /var/lib/jenkins/secrets/initialAdminPassword $HOME/jenkinsInitPassword
+sudo usermod -aG docker jenkins
+sudo systemctl restart jenkins
