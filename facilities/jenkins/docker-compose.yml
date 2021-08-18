@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  server:
+    image: jenkins/jenkins:lts-jdk11
+    container_name: jenkins-master
+    restart: always
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - jenkins-data-volume:/var/jenkins/
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - UID_JENKINS=${UID_JENKINS:-1000}
+      - GID_JENKINS=${GID_JENKINS:-1000}
+
+volumes:
+  jenkins-data-volume:
+    external: false
