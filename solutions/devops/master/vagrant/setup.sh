@@ -19,9 +19,11 @@ sudo firewall-cmd --permanent --add-port=8080/tcp # jenkins
 sudo firewall-cmd --permanent --add-port=50000/tcp # jenkins
 sudo firewall-cmd --reload
 
+sudo yum install -y nginx
+sh -c "./provisioners-master/facilities/jenkins/jenkins.sh"
 docker-compose -f ./provisioners-master/facilities/openldap/docker-compose.yml up -d
 docker-compose -f ./provisioners-master/facilities/wekan/docker-compose.yml up -d
 docker-compose -f ./provisioners-master/facilities/gitea/docker-compose.yml up -d
 docker-compose -f ./provisioners-master/facilities/nexus/docker-compose.yml up -d
-sh -c "./provisioners-master/facilities/jenkins/jenkins.sh"
+
 
