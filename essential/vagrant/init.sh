@@ -5,7 +5,7 @@ if [ -n "$(command -v yum)" ];then # for centos
 sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 sudo yum update -y
 sudo yum upgrade -y
-sudo yum install -y yum-utils git wget python3-pip unzip
+sudo yum install -y epel-release yum-utils git wget python3-pip unzip
 sudo systemctl enable firewalld
 sudo systemctl start firewalld
 elif [ -n "$(command -v apt)" ];then # ubuntu
