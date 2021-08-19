@@ -22,5 +22,6 @@ sudo firewall-cmd --reload
 docker-compose -f ./provisioners-master/facilities/openldap/docker-compose.yml up -d
 docker-compose -f ./provisioners-master/facilities/wekan/docker-compose.yml up -d
 docker-compose -f ./provisioners-master/facilities/gitea/docker-compose.yml up -d
+docker-compose -f ./provisioners-master/facilities/nexus/docker-compose.yml up -d
 sh -c "./provisioners-master/facilities/jenkins/jenkins.sh"
-sh -c "./provisioners-master/facilities/nexus/nexus.sh"
+
