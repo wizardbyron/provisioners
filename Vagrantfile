@@ -9,10 +9,11 @@ BOXES ={
   "centos" => "centos/7"
 }
 DISTRO = "centos" # centos or ubuntu
+MIRROR = "tencent" # <empty>/tencent/aliyun
 DOMAIN_NAME = "example.org"
 CLUSTER_IP = "10.0.100.100"
 WORKER_NODES = 0
-SOLUTION = "default" # default/devops/k8s/microservices
+SOLUTION = "default" # default/devops/k8s
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
@@ -37,8 +38,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
     # Provision Master Node
-    master.vm.provision "shell", path: "./essential/#{PLATFORM}/init.sh", args: "", privileged: false, reset: true
-    master.vm.provision "shell", path: "./solutions/#{SOLUTION}/master/#{PLATFORM}/setup.sh", args: "#{DOMAIN_NAME} #{CLUSTER_IP}", privileged: false, reset: true
+    master.vm.provision "shell", path: "./essential/#{PLATFORM}/init.sh", args: "#{MIRROR}", privileged: false, reset: true
+    master.vm.provision "shell", path: "./solutions/#{SOLUTION}/master/#{PLATFORM}/setup.sh", args: "#{MIRROR} #{DOMAIN_NAME} #{CLUSTER_IP}", privileged: false, reset: true
   end
 
   (1..WORKER_NODES).each do |i|
@@ -63,8 +64,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       worker.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
       # Provision Worker Node
-      worker.vm.provision "shell", path: "./essential/#{PLATFORM}/init.sh", args: "", privileged: false, reset: true
-      worker.vm.provision "shell", path: "./solutions/#{SOLUTION}/worker/#{PLATFORM}/setup.sh", args: "#{DOMAIN_NAME} #{CLUSTER_IP}", privileged: false, reset: true
+      worker.vm.provision "shell", path: "./essential/#{PLATFORM}/init.sh", args: "#{MIRROR}", privileged: false, reset: true
+      worker.vm.provision "shell", path: "./solutions/#{SOLUTION}/worker/#{PLATFORM}/setup.sh", args: "#{MIRROR} #{CLUSTER_IP} #{DOMAIN_NAME}", privileged: false, reset: true
     end
   end
 end
