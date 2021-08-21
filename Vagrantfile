@@ -9,9 +9,10 @@ BOXES ={
   "centos" => "centos/7"
 }
 DISTRO = "centos" # centos or ubuntu
-LOCAL_CLUSTER_IP = "10.0.100.100"
+DOMAIN_NAME = "example.org"
+CLUSTER_IP = "10.0.100.100"
 WORKER_NODES = 0
-SOLUTION = "devops" # devops/k8s/microservices
+SOLUTION = "default" # default/devops/k8s/microservices
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
@@ -28,7 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.synced_folder ".", "/vagrant", type: "rsync"
 
     #Private_network Settings
-    master.vm.network "private_network", ip: "#{LOCAL_CLUSTER_IP}"
+    master.vm.network "private_network", ip: "#{CLUSTER_IP}"
     master.vm.hostname = 'master-node'
 
     #SSH
@@ -37,7 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # Provision Master Node
     master.vm.provision "shell", path: "./essential/#{PLATFORM}/init.sh", args: "", privileged: false, reset: true
-    master.vm.provision "shell", path: "./solutions/#{SOLUTION}/master/#{PLATFORM}/setup.sh", args: "#{LOCAL_CLUSTER_IP}", privileged: false, reset: true
+    master.vm.provision "shell", path: "./solutions/#{SOLUTION}/master/#{PLATFORM}/setup.sh", args: "#{DOMAIN_NAME} #{CLUSTER_IP}", privileged: false, reset: true
   end
 
   (1..WORKER_NODES).each do |i|
@@ -63,7 +64,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Provision Worker Node
       worker.vm.provision "shell", path: "./essential/#{PLATFORM}/init.sh", args: "", privileged: false, reset: true
-      worker.vm.provision "shell", path: "./solutions/#{SOLUTION}/worker/#{PLATFORM}/setup.sh", args: "#{LOCAL_CLUSTER_IP}", privileged: false, reset: true
+      worker.vm.provision "shell", path: "./solutions/#{SOLUTION}/worker/#{PLATFORM}/setup.sh", args: "#{DOMAIN_NAME} #{CLUSTER_IP}", privileged: false, reset: true
     end
   end
 end
