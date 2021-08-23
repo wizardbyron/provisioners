@@ -7,6 +7,6 @@
 * [Gitea](./gitea/)
 * [Nexus Repository Manager](./nexus/)
 * [Kubernetes cluster and worker nodes](./k8s/)
-* [Terraform](./terraform/)
+* [Wordpress](./wordpress/)
 
 
