@@ -2,3 +2,8 @@
 *.log
 .DS_Store
 profile/
+.ssh/
+**/.terraform
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup

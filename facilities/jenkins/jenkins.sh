@@ -7,11 +7,11 @@ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 sudo yum install -y jenkins
 sudo service jenkins start
 elif [ -n "$(command -v apt)" ];then # ubuntu
-sudo apt-get install -y openjdk-11-jdk
+sudo apt install -y openjdk-11-jdk
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-sudo apt-get update
-sudo apt-get install -y jenkins
+sudo apt update
+sudo apt install -y jenkins
 else
 echo "Your Linux package manager hasn't support"
 exit 1

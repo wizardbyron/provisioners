@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 echo "Setting up firewalld, refer to https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/"
-sudo systemctl enable firewalld
-sudo systemctl start firewalld
+sudo firewall-cmd --permanent --add-port=179/tcp # For Calico BGP
 sudo firewall-cmd --permanent --add-port=10250/tcp
 sudo firewall-cmd --permanent --add-port=30000-32767/tcp
 sudo firewall-cmd --reload
 
-echo "Getting join-cluster.sh from $1"
-curl -fsSL http://$1:8000/join-cluster.sh | sudo bash
+CONTROL_PANEL_IP=$1
+echo "Getting join-cluster.sh from $CONTROL_PANEL_IP"
+curl -fsSL http://$CONTROL_PANEL_IP:8000/join-cluster.sh | sudo bash

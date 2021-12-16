@@ -54,10 +54,24 @@ Facility list please refer to [facilities/README.md](./facilities/README.md).
 
 ## Convention
 
-1. Facilites scripts can be verified indivadually. 
-2. Cross distro scripts are better than distro-specified scripts.
+1. Facilites scripts can be verified indivadually.
+2. Distro-crossed scripts are better than distro-specified scripts.
 3. Docker is better than shell.
 4. Docker-compose is better than docker in shell.
+5. Follow [Terraform best practices](#terraform-best-practices)
+
+## Terraform best practices
+
+1. Don’t commit the `.tfstate` file
+2. Configure a backend
+3. Back up your state files
+4. Keep your backends small
+5. Use one state per environment
+6. Setup backend state locking
+7. Execute Terraform in an automated build
+8. Manipulate state only through the commands
+9. Use variables (liberally)
+10. Use modules (only where necessary)
 
 ## Known Issues
 
@@ -70,6 +84,35 @@ Please uninstall your current version VirtualBox Guest Plugin by following comma
 Then install earlier version `0.21` by following command:
 
 ```vagrant plugin install vagrant-vbguest --plugin-version 0.21```
+
+### 2. macOS Monterey and VirtualBox 6.1.28 (Fixed in VirtualBox 6.1.30)
+
+Ref: https://github.com/hashicorp/vagrant/issues/12557#issuecomment-958183899:
+
+To summarize this issue, there are currently issues with VirtualBox on macOS Monterey. There's three different things which are causing issues:
+
+1. VMs cannot be started headless VB#20636
+2. kexts not being loaded properly VB#20637
+3. Cannot create network within given subnet VB#20626
+
+For 1, the only way to workaround this is to enable the GUI within the provider configuration:
+
+``` ruby
+config.vm.provider :virtualbox do |vb|
+  vb.gui = true
+end
+```
+
+For 2, the kernel extensions can be loaded manually (which may be required after reboot):
+
+``` Shell
+sudo kextload -b org.virtualbox.kext.VBoxDrv;
+sudo kextload -b org.virtualbox.kext.VBoxNetFlt;
+sudo kextload -b org.virtualbox.kext.VBoxNetAdp;
+sudo kextload -b org.virtualbox.kext.VBoxUSB;
+```
+
+For 3, the 6.1.28 release introduced a new restriction when creating networks which can be found here. PR #12564 adds validation to given addresses and returns back useful error message for how to add more ranges to the VirtualBox configuration.
 
 ## How to contribution
 

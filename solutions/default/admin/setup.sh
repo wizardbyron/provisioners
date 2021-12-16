@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 PATH=$PATH:/home/$(whoami)/.local/bin
-export CLUSTER_IP=$2
+export CLUSTER_IP=$1
 echo "Cluster IP: $CLUSTER_IP"
 
 sudo rm -rf ./provisioners-master master.zip
