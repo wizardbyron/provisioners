@@ -31,7 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     #Private_network Settings
     admin.vm.network "private_network", ip: "#{ADMIN_IP}"
-    admin.vm.hostname = "admin-node"
+    admin.vm.hostname = "admin"
 
     #SSH
     admin.ssh.forward_agent = true
