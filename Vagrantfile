@@ -9,10 +9,11 @@ BOXES ={
   "ubuntu" => "ubuntu/focal64",
   "centos" => "centos/7"
 }
-DISTRO = "centos" # centos/ubuntu
+DISTRO = "ubuntu" # centos/ubuntu
 MIRROR = "tencent" # <empty>/aliyun/tencent
 ADMIN_IP = "192.168.56.10"
 NODES = 2
+DOCKER_REGISTRY = ""
 DOCKER_USERNAME = ""
 DOCKER_PASSWORD = ""
 
@@ -39,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
     # Provision admin Node
-    admin.vm.provision "shell", path: "./essential/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD}", privileged: false, reset: true
+    admin.vm.provision "shell", path: "./essential/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD} #{DOCKER_REGISTRY}", privileged: false, reset: true
     admin.vm.provision "shell", path: "./solutions/#{SOLUTION}/admin/setup.sh", args: "#{ADMIN_IP}", privileged: false, reset: true
   end
 
@@ -65,7 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
       # Provision node Node
-      node.vm.provision "shell", path: "./essential/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD}", privileged: false, reset: true
+      node.vm.provision "shell", path: "./essential/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD} #{DOCKER_REGISTRY}", privileged: false, reset: true
       node.vm.provision "shell", path: "./solutions/#{SOLUTION}/worker/setup.sh", args: "#{ADMIN_IP}", privileged: false, reset: true
     end
   end
