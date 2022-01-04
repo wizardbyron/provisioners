@@ -40,24 +40,24 @@ echo "sudo swapoff -a">>$HOME/.bashrc
 
 echo "Install Kubernetes packages via package manager."
 
-MIRROR=$1
-if [ $MIRROR = "aliyun" ];then
-    MIRROR_URL=mirrors.aliyun.com/kubernetes
+KUBE_VERSION=$1
+PACKAGE_MIRROR=$2
+if [ $PACKAGE_MIRROR = "aliyun" ];then
+    PACKAGE_URL=mirrors.aliyun.com/kubernetes
 else
-    MIRROR_URL=packages.cloud.google.com
+    PACKAGE_URL=packages.cloud.google.com
 fi
 
-KUBE_VERSION=$2
 
 if [ -n "$(command -v yum)" ];then # for centos
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
-baseurl=https://$MIRROR_URL/yum/repos/kubernetes-el7-\$basearch
+baseurl=https://$PACKAGE_URL/yum/repos/kubernetes-el7-\$basearch
 enabled=1
 gpgcheck=1
 repo_gpgcheck=1
-gpgkey=https://$MIRROR_URL/yum/doc/yum-key.gpg https://$MIRROR_URL/yum/doc/rpm-package-key.gpg
+gpgkey=https://$PACKAGE_URL/yum/doc/yum-key.gpg https://$PACKAGE_URL/yum/doc/rpm-package-key.gpg
 exclude=kubelet kubeadm kubectl
 EOF
 
@@ -69,8 +69,8 @@ sh -c "sudo yum install -y kubelet-$KUBE_VERSION kubeadm-$KUBE_VERSION kubectl-$
 elif [ -n "$(command -v apt)" ];then # ubuntu
   sudo apt update
   sudo apt install -y apt-transport-https ca-certificates curl
-  curl https://$MIRROR_URL/apt/doc/apt-key.gpg | sudo apt-key add -
-  echo "deb https://$MIRROR_URL/apt/ kubernetes-xenial main"|sudo tee /etc/apt/sources.list.d/kubernetes.list
+  curl https://$PACKAGE_URL/apt/doc/apt-key.gpg | sudo apt-key add -
+  echo "deb https://$PACKAGE_URL/apt/ kubernetes-xenial main"|sudo tee /etc/apt/sources.list.d/kubernetes.list
   sudo apt update
   ZERO=0
   sh -c "sudo apt install -y kubelet=$KUBE_VERSION$ZERO kubeadm=$KUBE_VERSION$ZERO kubectl=$KUBE_VERSION$ZERO"

@@ -39,8 +39,6 @@ function setup_control_panel(){
     sudo sh -c "echo '$(hostname -i) k8scp' >> /etc/hosts"
     if [ "$K8S_IMAGE_REPO" = "aliyun" ];then
         K8S_IMAGE_REPO_URL="registry.aliyuncs.com/google_containers"
-    elif [ "$K8S_IMAGE_REPO" = "azk8s" ];then
-        K8S_IMAGE_REPO_URL="gcr.azk8s.cn/google_containers"
     else
         K8S_IMAGE_REPO_URL="k8s.gcr.io"
     fi
