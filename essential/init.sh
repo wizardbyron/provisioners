@@ -38,10 +38,13 @@ else
 fi
 
 ### Setup Docker
+DOCKER_USERNAME=$2
+DOCKER_PASSWORD=$3
 if [ $? = 0 ]; then
     sudo usermod -aG docker $(whoami)
     sudo systemctl enable docker
     sudo systemctl restart docker
+    sudo docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 else
     echo "Install docker-ce failed, Please retry or install with mirror."
     exit 1
