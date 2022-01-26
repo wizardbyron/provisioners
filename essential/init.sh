@@ -60,6 +60,21 @@ else
     sudo sh -c "python3 -m pip install --upgrade pip"
 fi
 
+### Install terraform
+if [ -n "$(command -v yum)" ];then
+    sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+    sudo yum -y install terraform
+elif [ -n "$(command -v apt)" ];then
+    curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+    sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+    sudo apt-get update && sudo apt-get install terraform
+else
+    echo "Your Linux package manager hasn't support"
+    exit 1
+fi
+
+
+
 ## post installation
 mkdir configs
 ssh-keygen  -t rsa -P '' -f $HOME/.ssh/identity
