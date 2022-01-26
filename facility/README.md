@@ -1,4 +1,4 @@
-# Facilities
+# facility
 
 ## List
 

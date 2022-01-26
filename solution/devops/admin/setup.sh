@@ -23,10 +23,10 @@ sudo yum install -y nginx
 if [ -n "$(command -v setsebool)" ];then
 sudo setsebool -P httpd_can_network_connect 1
 fi
-sh -c "./provisioners-master/facilities/jenkins/jenkins.sh"
-docker-compose -f ./provisioners-master/facilities/openldap/docker-compose.yml up -d
-docker-compose -f ./provisioners-master/facilities/wekan/docker-compose.yml up -d
-docker-compose -f ./provisioners-master/facilities/gitea/docker-compose.yml up -d
-docker-compose -f ./provisioners-master/facilities/nexus/docker-compose.yml up -d
+sh -c "./provisioners-master/facility/jenkins/jenkins.sh"
+docker-compose -f ./provisioners-master/facility/openldap/docker-compose.yml up -d
+docker-compose -f ./provisioners-master/facility/wekan/docker-compose.yml up -d
+docker-compose -f ./provisioners-master/facility/gitea/docker-compose.yml up -d
+docker-compose -f ./provisioners-master/facility/nexus/docker-compose.yml up -d
 
 

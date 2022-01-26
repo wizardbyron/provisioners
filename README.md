@@ -1,6 +1,6 @@
 # Provisioners
 
-Provisioners is a growing set of cloud solution provision scripts collection. You can customize and create solutions on any private or public cloud service.
+Provisioners is a growing set of cloud solution provision scripts collection. You can customize and create solution on any private or public cloud service.
 
 The latest solution progress please refer to [Github Project](https://github.com/wizardbyron/provisioners/projects/1).
 
@@ -33,21 +33,21 @@ The latest solution progress please refer to [Github Project](https://github.com
 * CentOS 7
 * Ubuntu Focal64
 
-## Facilities
+## facility
 
-Facility list please refer to [facilities/README.md](./facilities/README.md).
+Facility list please refer to [facility/README.md](./facility/README.md).
 
-## Solutions
+## solution
 
-* [DevOps Platform](./solutions/devops/)
-* [Kubernetes Platform](./solutions/k8s/)
+* [DevOps Platform](./solution/devops/)
+* [Kubernetes Platform](./solution/k8s/)
 * Microservice Platform (TBD)
 * BigData(TBD)
 
 ## Workflow
 
 1. Fork and clone this repo.
-2. Provision & update solutions in solution scripts.
+2. Provision & update solution in solution scripts.
 3. Extract & Push facility script from solution scripts.
 4. Verify facility script in solution scripts.
 5. Push solution script.
