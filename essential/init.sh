@@ -19,7 +19,7 @@ if [ -n "$(command -v yum)" ];then
     fi
     sudo yum update -y
     sudo yum upgrade -y
-    sudo yum install -y epel-release yum-utils git wget python3-pip unzip tcpdump ntp ntpdate ntp-doc openssh-server
+    sudo yum install -y epel-release yum-utils git wget python3-pip unzip tcpdump ntp ntpdate ntp-doc openssh-server net-tools bind-utils
     sudo yum install -y docker-ce docker-ce-cli containerd.io
     sudo systemctl enable --now firewalld
 ### UBUNTU
