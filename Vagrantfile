@@ -41,7 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # Provision admin Node
     admin.vm.provision "shell", path: "./essential/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD} #{DOCKER_REGISTRY}", privileged: false, reset: true
-    admin.vm.provision "shell", path: "./solution/#{SOLUTION}/admin/setup.sh", args: "#{ADMIN_IP}", privileged: false, reset: true
+    admin.vm.provision "shell", path: "./solution/#{SOLUTION}/admin.sh", args: "#{ADMIN_IP}", privileged: false, reset: true
   end
 
   (1..NODES).each do |i|
@@ -67,7 +67,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Provision node Node
       node.vm.provision "shell", path: "./essential/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD} #{DOCKER_REGISTRY}", privileged: false, reset: true
-      node.vm.provision "shell", path: "./solution/#{SOLUTION}/worker/setup.sh", args: "#{ADMIN_IP}", privileged: false, reset: true
+      node.vm.provision "shell", path: "./solution/#{SOLUTION}/node.sh", args: "#{ADMIN_IP}", privileged: false, reset: true
     end
   end
 end
