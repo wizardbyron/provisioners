@@ -13,9 +13,6 @@ DISTRO = "ubuntu" # centos/ubuntu
 MIRROR = "tencent" # <empty>/aliyun/tencent
 ADMIN_IP = "192.168.56.10"
 NODES = 2
-DOCKER_REGISTRY = ""
-DOCKER_USERNAME = ""
-DOCKER_PASSWORD = ""
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
