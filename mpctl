@@ -44,8 +44,9 @@ function create_cluster(){
 
 function install_service(){
     SERVICE=$1
+    PARAM=$2
     MASTER_IP=$(multipass list|grep mp-master|awk '{print $3}')
-    multipass exec mp-master -- sh -c "/var/host/service/$SERVICE/server.sh"
+    multipass exec mp-master -- sh -c "/var/host/service/$SERVICE/server.sh $PARAM"
     for INSTANCE in $(multipass list|grep mp-node|awk '{print $1}');do
         multipass exec $INSTANCE -- sh -c "/var/host/service/$SERVICE/client.sh $MASTER_IP" &
     done
@@ -54,6 +55,7 @@ function install_service(){
 
 COMMAND=$1
 SUB_COMMAND=$2
+PARAM=$3
 
 case $COMMAND in
 "create")
@@ -83,9 +85,9 @@ case $COMMAND in
         ls -1 ./service
         exit 1
     else
-        install_service $SUB_COMMAND
+        install_service $SUB_COMMAND $PARAM
     fi
     ;;
 *)
-    echo "usage: ./mpctl [create|destroy|start|stop|restart|install <service>]"
+    echo "usage: ./mpctl [create|destroy|start|stop|restart|install <service> [param]]"
 esac
