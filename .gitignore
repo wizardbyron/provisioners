@@ -1,9 +1,10 @@
 **/.vagrant
-*.log
-.DS_Store
-profile/
-.ssh/
 **/.terraform
 **/.terraform.lock.hcl
-*.tfstate
-*.tfstate.backup
+**/.log
+**/.tfstate
+**/.tfstate.backup
+.DS_Store
+.ssh/
+profile/
+share/
