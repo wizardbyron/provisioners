@@ -29,7 +29,7 @@ elif [ -n "$(command -v apt)" ];then
         sudo sed -i "s/archive.ubuntu.com/$MIRROR_URL/g" /etc/apt/sources.list
     fi
     sudo apt update -y
-    sudo apt install -y software-properties-common git firewalld curl python3-pip unzip docker.io tcpdump ntp openssh-server
+    sudo apt install -y software-properties-common firewalld unzip docker-compose tcpdump ntp openssh-server
     sudo apt full-upgrade -y
     sudo systemctl enable --now firewalld
 else

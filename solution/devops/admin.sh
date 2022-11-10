@@ -18,10 +18,10 @@ sudo firewall-cmd --reload
 if [ -n "$(command -v setsebool)" ];then
     sudo setsebool -P httpd_can_network_connect 1
 fi
-sh -c "./vagrant/facility/jenkins/jenkins.sh"
-docker-compose -f /vagrant/facility/openldap/docker-compose.yml up -d
-docker-compose -f /vagrant/facility/wekan/docker-compose.yml up -d
-docker-compose -f /vagrant/facility/gitea/docker-compose.yml up -d
-docker-compose -f /vagrant/facility/nexus/docker-compose.yml up -d
+sh -c "./vagrant/service/jenkins/jenkins.sh"
+docker-compose -f /vagrant/service/openldap/docker-compose.yml up -d
+docker-compose -f /vagrant/service/wekan/docker-compose.yml up -d
+docker-compose -f /vagrant/service/gitea/docker-compose.yml up -d
+docker-compose -f /vagrant/service/nexus/docker-compose.yml up -d
 
 

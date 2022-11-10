@@ -33,9 +33,9 @@ The latest solution progress please refer to [Github Project](https://github.com
 * CentOS 7
 * Ubuntu Focal64
 
-## facility
+## service
 
-Facility list please refer to [facility/README.md](./facility/README.md).
+service list please refer to [service/README.md](./service/README.md).
 
 ## solution
 
@@ -48,8 +48,8 @@ Facility list please refer to [facility/README.md](./facility/README.md).
 
 1. Fork and clone this repo.
 2. Provision & update solution in solution scripts.
-3. Extract & Push facility script from solution scripts.
-4. Verify facility script in solution scripts.
+3. Extract & Push service script from solution scripts.
+4. Verify service script in solution scripts.
 5. Push solution script.
 
 ## Convention
