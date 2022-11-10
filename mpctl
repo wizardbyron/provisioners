@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+MIRROR_URL="mirrors.tencent.com"
+NODES=2
+DOMAIN="cluster.local"
+
+function cluster_cmd(){
+    COMMAND=$1 # start/stop/restart/delete
+    for INSTANCE in $(multipass list|grep mp-|awk '{print $1}');do
+        multipass $COMMAND $INSTANCE &
+    done
+    wait
+}
+
+function create_master(){
+    K8S_VER=$1
+    multipass launch --name mp-master --cpus 4 --mem 4G --disk 40G \
+        --mount $(pwd)/serivces/:/var/host/serivces \
+        --mount $(pwd)/share/:/var/host/share
+    if [ $? -eq 0 ];then
+        multipass exec mp-master -- sh -c "/var/host/scripts/init.sh $MIRROR_URL"
+    fi
+}
+
+function create_node(){
+    K8S_VER=$1
+    INDEX=$2
+    MASTER_IP=$(multipass list|grep mp-master|awk '{print $3}')
+    multipass launch --name mp-node-$INDEX --cpus 2 --mem 2G --disk 10G \
+        --mount $(pwd)/serivces/:/var/host/serivces \
+        --mount $(pwd)/share:/var/host/share
+    if [ $? -eq 0 ];then
+        multipass exec mp-node-$INDEX -- sh -c "/var/host/scripts/init.sh $MIRROR_URL"
+    fi
+}
+
+function create_cluster(){
+    create_master
+    INDEX=0
+    while [ "$INDEX" -lt "$NODES" ]
+    do
+        INDEX=`expr $INDEX + 1`
+        setup_node $K8S_VER $INDEX &
+    done
+    wait
+}
+
+COMMAND=$1
+SUB_COMMAND=$2
+
+case $COMMAND in
+"create")
+    create_cluster $SUB_COMMAND
+    ;;
+"destroy")
+    if [ -n "$SUB_COMMAND" ];then
+        multipass delete -p $SUB_COMMAND
+    else
+        cluster_cmd stop
+        cluster_cmd delete
+        multipass purge
+    fi
+    ;;
+"start")
+    cluster_cmd start
+    ;;
+"stop")
+    cluster_cmd stop
+    ;;
+"restart")
+    cluster_cmd restart
+    ;;
+"install")
+    if [ -z "$SUB_COMMAND" ];then
+        echo "ERROR: service must be given, available service:"
+        ls -1 ./service
+        exit 1
+    else
+        install_service $SUB_COMMAND
+    fi
+    ;;
+*)
+    echo "usage: ./mpctl [create|destroy|start|stop|restart|install <service>]"
+esac
