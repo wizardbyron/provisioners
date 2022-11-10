@@ -40,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
     # Provision admin Node
-    admin.vm.provision "shell", path: "./essential/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD} #{DOCKER_REGISTRY}", privileged: false, reset: true
+    admin.vm.provision "shell", path: "./init/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD} #{DOCKER_REGISTRY}", privileged: false, reset: true
     admin.vm.provision "shell", path: "./solution/#{SOLUTION}/admin.sh", args: "#{ADMIN_IP}", privileged: false, reset: true
   end
 
@@ -66,7 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
       # Provision node Node
-      node.vm.provision "shell", path: "./essential/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD} #{DOCKER_REGISTRY}", privileged: false, reset: true
+      node.vm.provision "shell", path: "./init/init.sh", args: "#{MIRROR} #{DOCKER_USERNAME} #{DOCKER_PASSWORD} #{DOCKER_REGISTRY}", privileged: false, reset: true
       node.vm.provision "shell", path: "./solution/#{SOLUTION}/node.sh", args: "#{ADMIN_IP}", privileged: false, reset: true
     end
   end
