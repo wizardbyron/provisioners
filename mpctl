@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 MIRROR_URL="mirrors.tencent.com"
-NODES=2
-DOMAIN="cluster.local"
+NODES=1
 
 function cluster_cmd(){
     COMMAND=$1 # start/stop/restart/delete
@@ -12,24 +11,23 @@ function cluster_cmd(){
 }
 
 function create_master(){
-    K8S_VER=$1
     multipass launch --name mp-master --cpus 4 --mem 4G --disk 40G \
-        --mount $(pwd)/serivces/:/var/host/serivces \
-        --mount $(pwd)/share/:/var/host/share
+        --mount $(pwd)/init/:/var/host/init \
+        --mount $(pwd)/service/:/var/host/service \
+        --mount $(pwd)/share:/var/host/share
     if [ $? -eq 0 ];then
-        multipass exec mp-master -- sh -c "/var/host/scripts/init.sh $MIRROR_URL"
+        multipass exec mp-master -- sh -c "/var/host/init/init-ubuntu.sh $MIRROR_URL"
     fi
 }
 
 function create_node(){
-    K8S_VER=$1
-    INDEX=$2
-    MASTER_IP=$(multipass list|grep mp-master|awk '{print $3}')
+    INDEX=$1
     multipass launch --name mp-node-$INDEX --cpus 2 --mem 2G --disk 10G \
-        --mount $(pwd)/serivces/:/var/host/serivces \
+        --mount $(pwd)/init/:/var/host/init \
+        --mount $(pwd)/service/:/var/host/service \
         --mount $(pwd)/share:/var/host/share
     if [ $? -eq 0 ];then
-        multipass exec mp-node-$INDEX -- sh -c "/var/host/scripts/init.sh $MIRROR_URL"
+        multipass exec mp-node-$INDEX -- sh -c "/var/host/init/init-ubuntu.sh $MIRROR_URL"
     fi
 }
 
@@ -39,7 +37,17 @@ function create_cluster(){
     while [ "$INDEX" -lt "$NODES" ]
     do
         INDEX=`expr $INDEX + 1`
-        setup_node $K8S_VER $INDEX &
+        create_node $INDEX &
+    done
+    wait
+}
+
+function install_service(){
+    SERVICE=$1
+    MASTER_IP=$(multipass list|grep mp-master|awk '{print $3}')
+    multipass exec mp-master -- sh -c "/var/host/service/$SERVICE/server.sh"
+    for INSTANCE in $(multipass list|grep mp-node|awk '{print $1}');do
+        multipass exec $INSTANCE -- sh -c "/var/host/service/$SERVICE/client.sh $MASTER_IP" &
     done
     wait
 }
