@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 MIRROR_URL="mirrors.tencent.com"
-NODES=1
+NODES=2
 
 function cluster_cmd(){
     COMMAND=$1 # start/stop/restart/delete
